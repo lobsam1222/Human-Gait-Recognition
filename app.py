@@ -9,7 +9,7 @@ from utils.foreground_segmenter import segment_foreground_mediapipe
 
 # Set page config
 st.set_page_config(page_title="Gait Recognition System", layout="wide")
-st.title("🧍‍♂️ Gait Recognition System")
+st.title(" Gait Recognition System")
 
 # Select mode
 mode = st.radio("Select Mode", ["Enroll New Person", "Recognize Person"])
@@ -43,6 +43,15 @@ if mode == "Enroll New Person":
 
         # Extract silhouettes and compute gait features
         silhouettes = get_silhouettes(frames, output_dir=f"data/silhouettes/{name}")
+        
+        # Display silhouette images
+        st.subheader("Silhouette Frames")
+        cols = st.columns(5)
+        for i, img_path in enumerate(silhouettes[:10]):
+            with cols[i % 5]:
+                st.image(img_path, use_container_width=True)
+
+        
         gait_feature = compute_gait_feature(silhouettes)
 
         # Save feature to database
@@ -83,6 +92,15 @@ elif mode == "Recognize Person":
         # Extract silhouettes and compute gait feature
         silhouettes = get_silhouettes(frames, output_dir="data/silhouettes/test")
         st.success(f"{len(silhouettes)} silhouettes extracted.")
+
+        # Display silhouette images
+        st.subheader("Silhouette Frames")
+        cols = st.columns(5)
+        for i, img_path in enumerate(silhouettes[:10]):
+            with cols[i % 5]:
+                st.image(img_path, use_container_width=True)
+
+
 
         gait_feature = compute_gait_feature(silhouettes)
 
